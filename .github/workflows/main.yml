@@ -36,7 +36,7 @@ jobs:
       # Step 4: Run your Python script
       - name: Run Weather Data Extraction
         run: |
-          python script.py  # Replace with the name of your script file
+          ExtractTempHumidity.py  # Replace with the name of your script file
         env:
           DB_FILE: ${{ env.DB_FILE }}
           OUTPUT_FILE_NAME: ${{ env.OUTPUT_FILE_NAME }}
