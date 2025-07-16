@@ -1,0 +1,49 @@
+name: Weather Data Extraction Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  DB_FILE: "weather.db"
+  OUTPUT_FILE_NAME: "formatdata2.csv"  # You can change this dynamically later
+
+jobs:
+  weather-data-extraction:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Python
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      # Step 3: Install dependencies (in case you need external libraries, e.g., sqlite3, pandas, etc.)
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install sqlite3  # In case it's not already installed in the runner
+
+      # Step 4: Run your Python script
+      - name: Run Weather Data Extraction
+        run: |
+          python script.py  # Replace with the name of your script file
+        env:
+          DB_FILE: ${{ env.DB_FILE }}
+          OUTPUT_FILE_NAME: ${{ env.OUTPUT_FILE_NAME }}
+      
+      # Step 5: Upload the output file as an artifact (optional)
+      - name: Upload output CSV file
+        uses: actions/upload-artifact@v2
+        with:
+          name: weather-data
+          path: ${{ env.OUTPUT_FILE_NAME }}
